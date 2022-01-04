@@ -62,7 +62,7 @@ const Login = () => {
   }
   const location = useLocation()
   const { from } = (location.state as LocationState) || {
-    from: { pathname: "/" },
+    from: { pathname: "/home" },
   }
 
   const { setUser } = useAuth()
@@ -77,6 +77,7 @@ const Login = () => {
       )
       if (data.user) {
         setUser(data.user)
+        console.log(data.user)
         navigate(from.pathname, { replace: true })
       }
     } catch (e: any) {
