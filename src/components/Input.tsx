@@ -28,13 +28,14 @@ const Label = styled.label`
 
 interface InputProps {
   label: string
+  type?: string
 }
 
-const Input = ({ label }: InputProps) => {
+const Input = ({ label, type }: InputProps) => {
   return (
     <Container>
       <Label>{label}</Label>
-      <InputEl />
+      <InputEl type={type} />
     </Container>
   )
 }

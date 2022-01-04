@@ -49,7 +49,7 @@ const Login = () => {
       </Paragraph>
       <InputsContainer>
         <Input label="User" />
-        <Input label="Password" />
+        <Input label="Password" type="password" />
       </InputsContainer>
 
       <Paragraph size={16}>Forgot your password?</Paragraph>
