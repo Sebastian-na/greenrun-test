@@ -29,13 +29,21 @@ const Label = styled.label`
 interface InputProps {
   label: string
   type?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  innerRef?: React.RefObject<HTMLInputElement>
 }
 
-const Input = ({ label, type }: InputProps) => {
+const Input = ({ label, type, onChange, innerRef, onEnter }: InputProps) => {
   return (
     <Container>
       <Label>{label}</Label>
-      <InputEl type={type} />
+      <InputEl
+        ref={innerRef}
+        onChange={onChange}
+        type={type}
+        onKeyUp={onEnter}
+      />
     </Container>
   )
 }
