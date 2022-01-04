@@ -1,29 +1,34 @@
-import { createGlobalStyle } from "styled-components"
+import { createGlobalStyle, DefaultTheme } from "styled-components"
 
-export interface ThemeType {
-  bgColor: string
-  bgColorOnBgColor: string
-  darkTextOnBg: string
-  lightTextOnBg: string
-  textOnBg: string
-  primaryColor: string
-  primaryColorVariant: string
-  primaryColor2Variant: string
-  primaryColor3Variant: string
-  buttonBgColor: string
-  menuItemBgColor: string
-  menuItemColorActive: string
-  menuItemColorInactive: string
-  xColorHome: string
-  xColorHistory: string
-  radius: string
+declare module "styled-components" {
+  export interface DefaultTheme {
+    bgColor: string
+    bgColorOnBgColor: string
+    darkTextOnBg: string
+    lightTextOnBg: string
+    textOnBg: string
+    primaryColor: string
+    primaryColorVariant: string
+    primaryColor2Variant: string
+    primaryColor3Variant: string
+    buttonBgColor: string
+    buttonShadow: string
+    menuItemBgColor: string
+    menuItemColorActive: string
+    menuItemColorInactive: string
+    xColorHome: string
+    xColorHistory: string
+    radius: string
+  }
 }
 
-export const GlobalStyles = createGlobalStyle<{ theme: ThemeType }>`
+export const GlobalStyles = createGlobalStyle<{ theme: DefaultTheme }>`
   * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   }
   html{
     font-size: 62.5%;
@@ -40,17 +45,18 @@ export const GlobalStyles = createGlobalStyle<{ theme: ThemeType }>`
   }
 `
 
-const lightTheme: ThemeType = {
+const lightTheme: DefaultTheme = {
   bgColor: "#f3f3f3",
   bgColorOnBgColor: "#ffffff",
-  darkTextOnBg: "fefefe",
-  lightTextOnBg: "fefefe",
-  textOnBg: "fefefe",
+  darkTextOnBg: "#161617",
+  lightTextOnBg: "#3c3c3c",
+  textOnBg: "#232232",
   primaryColor: "#236bfe",
   primaryColorVariant: "#0d4ed3",
   primaryColor2Variant: "#063ba8",
   primaryColor3Variant: "#195ae0",
   buttonBgColor: "#ffffff",
+  buttonShadow: "0px 4px 30px rgba(34, 105, 251, 0.8)",
   menuItemBgColor: "#fbfbfb",
   menuItemColorInactive: "#ededed",
   menuItemColorActive: "#1a5be1",
@@ -59,17 +65,18 @@ const lightTheme: ThemeType = {
   radius: "25px",
 }
 
-const darkTheme: ThemeType = {
+const darkTheme: DefaultTheme = {
   bgColor: "#181828",
   bgColorOnBgColor: "#2c2b3e",
-  darkTextOnBg: "#161617",
-  lightTextOnBg: "#3c3c3c",
-  textOnBg: "#232232",
+  darkTextOnBg: "#fefefe",
+  lightTextOnBg: "#fefefe",
+  textOnBg: "#fefefe",
   primaryColor: "#236bfe",
   primaryColorVariant: "#0d4ed3",
   primaryColor2Variant: "#063ba8",
   primaryColor3Variant: "#195ae0",
   buttonBgColor: "#222243",
+  buttonShadow: "0px 4px 30px rgba(34, 105, 251, 0.8)",
   menuItemBgColor: "#1f1f31",
   menuItemColorActive: "#ffffff",
   menuItemColorInactive: "#181828",
