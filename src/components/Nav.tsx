@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router-dom"
 import { SyntheticEvent, useState } from "react"
 import styled from "styled-components"
-import HomeIcon from "./HomeIcon"
-import HistoryIcon from "./HistoryIcon"
-import NotesIcon from "./NotesIcon"
+import HomeIcon from "../assets/icons/HomeIcon"
+import HistoryIcon from "../assets/icons/HistoryIcon"
+import NotesIcon from "../assets/icons/NotesIcon"
 import defaultUser from "../assets/images/default_user.png"
 import { useAuth } from "../contexts/AuthContext"
 

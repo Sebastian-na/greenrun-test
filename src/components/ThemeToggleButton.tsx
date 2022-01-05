@@ -12,7 +12,7 @@ const StyledButton = styled.div`
   z-index: 5;
   width: 60px;
   height: 60px;
-
+  cursor: pointer;
   &:after {
     content: ${({ theme }) => (theme.theme === "dark" ? "'🌤️'" : "'🌙'")};
     font-size: 25px;

@@ -1,22 +1,13 @@
 import { useEffect, useState } from "react"
-import { getAllSports } from "../api"
-import {
-  getFirestore,
-  getDocs,
-  collection,
-  query,
-  where,
-} from "firebase/firestore"
 import { useAuth } from "../contexts/AuthContext"
 import styled from "styled-components"
 import HeartIcon from "../assets/icons/HeartIcon"
 import ExIcon from "../assets/icons/ExIcon"
 import ThemeToggleButton from "../components/ThemeToggleButton"
 import { useTheme } from "styled-components"
+import { getAndFilterSports, addSport } from "../services/db"
 
-const db = getFirestore()
-
-interface Sport {
+export interface Sport {
   idSport: string
   strSport: string
   strSportThumb: string
@@ -78,6 +69,7 @@ const HeartIconContainer = styled.div`
   padding: 20px;
   display: grid;
   place-items: center;
+  cursor: pointer;
 `
 
 const ExIconContainer = styled.div`
@@ -88,71 +80,65 @@ const ExIconContainer = styled.div`
   border-radius: 50%;
   display: grid;
   place-items: center;
+  cursor: pointer;
 `
 
 const Home = () => {
   const [sports, setSports] = useState<Sport[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const { user } = useAuth()
   const theme = useTheme()
 
   useEffect(() => {
     document.title = "Home"
-    async function getAndFilterSports() {
-      try {
-        const allSports: Sport[] = await getAllSports()
-        const userQuery = query(
-          collection(db, "users"),
-          where("id", "==", user.uid)
-        )
-        const userSnapShot = await getDocs(userQuery)
-        const userDocId = userSnapShot.docs[0].id
-        const userSports = await getDocs(
-          collection(db, `users/${userDocId}/sports`)
-        )
-        const filteredSports = allSports.filter(
-          (sport) =>
-            !userSports.docs.some(
-              (doc) => doc.data().id_sport === sport.idSport
-            )
-        )
-        setSports(filteredSports)
-      } catch (e) {
-        console.log(e)
-      }
+    async function getSports() {
+      setIsLoading(true)
+      const sports = (await getAndFilterSports(user.uid)) as Sport[]
+      setSports(sports)
+      setIsLoading(false)
     }
-
-    getAndFilterSports()
+    getSports()
   }, [])
-  return (
-    sports.length > 0 && (
-      <>
-        <GridContainer>
-          <ThemeToggleButton />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportImage src={sports[1].strSportThumb} />
-          <SportName>{sports[1].strSport}</SportName>
-        </GridContainer>
-        <Controls>
-          <ExIconContainer>
-            <ExIcon fill={theme.xColorHome} />
-          </ExIconContainer>
-          <HeartIconContainer>
-            <HeartIcon />
-          </HeartIconContainer>
-        </Controls>
-      </>
-    )
+
+  const addSportAndRemoveFromScreen = async (liked: boolean) => {
+    addSport(sports[0], liked, user.uid)
+    setSports(sports.slice(1))
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  return sports?.length > 0 ? (
+    <>
+      <GridContainer>
+        <ThemeToggleButton />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportImage src={sports[0].strSportThumb} />
+        <SportName>{sports[0].strSport}</SportName>
+      </GridContainer>
+      <Controls>
+        <ExIconContainer onClick={() => addSportAndRemoveFromScreen(false)}>
+          <ExIcon fill={theme.xColorHome} />
+        </ExIconContainer>
+        <HeartIconContainer onClick={() => addSportAndRemoveFromScreen(true)}>
+          <HeartIcon />
+        </HeartIconContainer>
+      </Controls>
+    </>
+  ) : (
+    <div>No available sports to show</div>
   )
 }
 
