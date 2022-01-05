@@ -5,6 +5,7 @@ import Login from "./screens/Login"
 import Home from "./screens/Home"
 import History from "./screens/History"
 import { AuthProvider, RequireAuth } from "./contexts/AuthContext"
+import Nav from "./components/Nav"
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
                 }
               />
             </Routes>
+
+            <Nav />
           </BrowserRouter>
         </AuthProvider>
       </CustomThemeProvider>

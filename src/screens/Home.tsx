@@ -1,7 +1,7 @@
-import React from "react"
+import NavMenu from "../components/Nav"
 
 const Home = () => {
-  return <div></div>
+  return <>{/* <NavMenu /> */}</>
 }
 
 export default Home

@@ -18,7 +18,6 @@ declare module "styled-components" {
     menuItemColorInactive: string
     xColorHome: string
     xColorHistory: string
-    radius: string
   }
 }
 
@@ -62,7 +61,6 @@ const lightTheme: DefaultTheme = {
   menuItemColorActive: "#1a5be1",
   xColorHome: "#d36060",
   xColorHistory: "#ea596f",
-  radius: "25px",
 }
 
 const darkTheme: DefaultTheme = {
@@ -82,7 +80,6 @@ const darkTheme: DefaultTheme = {
   menuItemColorInactive: "#181828",
   xColorHome: "#ffffff",
   xColorHistory: "#ea596f",
-  radius: "25px",
 }
 
 const theme = {

@@ -32,12 +32,12 @@ const WelcomeContainer = styled.div`
   position: absolute;
   bottom: 0;
   background-color: ${({ theme }) => theme.bgColorOnBgColor};
-  border-top-left-radius: ${({ theme }) => theme.radius};
-  border-top-right-radius: ${({ theme }) => theme.radius};
+  border-top-left-radius: 36px;
+  border-top-right-radius: 36px;
   padding: 46px 32px;
   @media (min-width: 768px) {
     position: relative;
-    border-radius: ${({ theme }) => theme.radius};
+    border-radius: 36px;
   }
 `
 

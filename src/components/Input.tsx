@@ -15,7 +15,7 @@ const Container = styled.div`
   background: ${({ theme }) => theme.bgColorOnBgColor};
   outline: none;
   border: none;
-  border-radius: ${({ theme }) => theme.radius};
+  border-radius: 18px;
   padding: 16px 12px;
 `
 
