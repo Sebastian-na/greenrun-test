@@ -12,6 +12,9 @@ const NavMenuContainer = styled.div`
   width: 100%;
   padding: 20px;
   bottom: 0;
+  max-width: 500px;
+  left: 50%;
+  transform: translateX(-50%);
 `
 
 const NavMenu = styled.nav`
