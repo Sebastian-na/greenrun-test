@@ -65,7 +65,6 @@ const Nav = () => {
   const [notesActive, setNotesActive] = useState(location.pathname === "/notes")
 
   const handleHomeClick = (e: SyntheticEvent) => {
-    console.log(e)
     setHomeActive(true)
     setHistoryActive(false)
     setNotesActive(false)
