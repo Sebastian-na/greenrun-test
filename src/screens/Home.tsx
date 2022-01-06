@@ -20,7 +20,7 @@ export interface Sport {
   strSportThumb: string
 }
 
-const SportImage = styled(animated.img)`
+const SportImage = styled.img`
   width: 100%;
 `
 
@@ -34,14 +34,15 @@ const SportName = styled.h2`
 `
 
 const GridContainer = styled(animated.div)`
-  position: relative;
+  position: absolute;
+  left: 50%;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 50% 50%;
   max-width: 500px;
   border-bottom-left-radius: 32px;
   border-bottom-right-radius: 32px;
-  overflow: hidden;
+  width: 100%;
   &:after {
     content: "";
     position: absolute;
@@ -57,13 +58,17 @@ const GridContainer = styled(animated.div)`
   }
 `
 
-const Controls = styled(animated.div)`
+const Controls = styled.div`
+  position: absolute;
+  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
-  padding-bottom: 150px;
-  margin-top: 15px;
+  bottom: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 200px;
 `
 
 const HeartIconContainer = styled.div`
@@ -103,17 +108,21 @@ const CenteredContainer = styled.div`
   transform: translate(-50%, -50%);
 `
 
-const SportsContainer = styled(animated.div)``
+const SportsContainer = styled(animated.div)`
+  position: relative;
+`
 
 const Home = () => {
   const [sports, setSports] = useState<Sport[]>([])
   const [index, setIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [liked, setLiked] = useState(false)
 
   const { user } = useAuth()
   const theme = useTheme()
 
-  const addSportAndRemoveFromScreen = async (liked: boolean) => {
+  const addSportAndRemoveFromScreen = (liked: boolean) => {
+    setLiked(liked)
     addSport(sports[index], liked, user.uid)
     setIndex(index + 1)
   }
@@ -149,13 +158,20 @@ const Home = () => {
     keys: null,
     from: {
       opacity: 0,
-      transform: "translate3d(0%,0,0) rotate(0deg)",
+      transform: "translate3d(-50%,0,0) rotate(0deg)",
+      // position: "absolute",
     },
-    enter: { opacity: 1, transform: "translate3d(0%,0,0) rotate(0deg)" },
+    enter: {
+      opacity: 1,
+      transform: "translate3d(-50%,0,0) rotate(0deg)",
+      zIndex: 20,
+    },
     leave: {
       opacity: 0,
-      transform: "translate3d(-100%,0,0) rotate(-45deg)",
-      position: "absolute",
+      transform: liked
+        ? "translate3d(100%,0,0) rotate(45deg)"
+        : "translate3d(-200%,0,0) rotate(-45deg)",
+      // position: "absolute",
     },
     config: {
       duration: 500,
@@ -165,6 +181,11 @@ const Home = () => {
   useEffect(() => {
     transRef.start()
   }, [index])
+
+  useEffect(() => {
+    if (liked) {
+    }
+  }, [liked])
 
   if (isLoading) {
     return <Loading size={300} />
@@ -176,24 +197,41 @@ const Home = () => {
         {transitions(
           (styles, index) =>
             sports[index] && (
-              <GridContainer style={styles}>
-                <ThemeToggleButton />
-                {[...Array(12)].map((_, i) => (
-                  <SportImage src={sports[index].strSportThumb} key={i} />
-                ))}
-                <SportName>{sports[index].strSport}</SportName>
-              </GridContainer>
+              <>
+                <GridContainer style={styles}>
+                  <ThemeToggleButton />
+                  {[...Array(10)].map((_, i) => (
+                    <SportImage src={sports[index].strSportThumb} key={i} />
+                  ))}
+                  {[...Array(2)].map((_, i) => (
+                    <SportImage
+                      src={sports[index].strSportThumb}
+                      style={{
+                        borderBottomRightRadius: "35px",
+                        borderBottomLeftRadius: "35px",
+                      }}
+                      key={i}
+                    />
+                  ))}
+
+                  <SportName>{sports[index].strSport}</SportName>
+                  <Controls>
+                    <ExIconContainer
+                      onClick={() => addSportAndRemoveFromScreen(false)}
+                    >
+                      <ExIcon fill={theme.xColorHome} />
+                    </ExIconContainer>
+                    <HeartIconContainer
+                      onClick={() => addSportAndRemoveFromScreen(true)}
+                    >
+                      <HeartIcon />
+                    </HeartIconContainer>
+                  </Controls>
+                </GridContainer>
+              </>
             )
         )}
       </SportsContainer>
-      <Controls style={fadeSlideIn}>
-        <ExIconContainer onClick={() => addSportAndRemoveFromScreen(false)}>
-          <ExIcon fill={theme.xColorHome} />
-        </ExIconContainer>
-        <HeartIconContainer onClick={() => addSportAndRemoveFromScreen(true)}>
-          <HeartIcon />
-        </HeartIconContainer>
-      </Controls>
     </>
   ) : (
     <CenteredContainer>No available sports to show</CenteredContainer>
