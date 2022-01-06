@@ -109,7 +109,7 @@ const SportsContainer = styled(animated.div)`
 
 const Home = () => {
   const [sports, setSports] = useState<Sport[]>([])
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
   const [liked, setLiked] = useState(false)
 
@@ -117,40 +117,10 @@ const Home = () => {
   const theme = useTheme()
 
   const addSportAndRemoveFromScreen = async (liked: boolean) => {
-    console.log("index", index)
-    console.log(sports[index])
-    // setLiked(liked)
+    setLiked(liked)
     addSport(sports[index], liked, user.uid)
     setIndex((prev) => prev + 1)
   }
-
-  useEffect(() => {
-    console.log("Mounted")
-  }, [])
-
-  let initialX: number | null = null
-  let movingX: number | null = null
-
-  const startTouch = (e: TouchEvent) => {
-    initialX = e.touches[0].clientX
-  }
-
-  const moveTouch = (e: TouchEvent) => {
-    movingX = e.touches[0].clientX
-  }
-
-  const endTouch = (e: TouchEvent) => {
-    console.log(initialX, movingX)
-    if (initialX === null || movingX === null) return
-    if (initialX + 100 < movingX) {
-      //swipe right
-      addSportAndRemoveFromScreen(true)
-    } else if (initialX - 100 > movingX) {
-      //swipe left
-      addSportAndRemoveFromScreen(false)
-    }
-  }
-
   useEffect(() => {
     document.title = "Home"
     async function getSports() {
@@ -159,15 +129,42 @@ const Home = () => {
       setSports(sports)
       setIsLoading(false)
     }
-    window.addEventListener("touchstart", startTouch, false)
-    window.addEventListener("touchmove", moveTouch, false)
-    window.addEventListener("touchend", endTouch, false)
 
+    // let initialX: number | null = null
+    // let movingX: number | null = null
+
+    // function startTouch(e: TouchEvent) {
+    //   initialX = e.touches[0].clientX
+    // }
+
+    // function moveTouch(e: TouchEvent) {
+    //   movingX = e.touches[0].clientX
+    // }
+
+    // function endTouch(e: TouchEvent) {
+    //   if (initialX === null || movingX === null) return
+    //   if (initialX + 100 < movingX) {
+    //     //swipe right
+    //     console.log("swipe right")
+    //     console.log("index", index)
+    //     addSportAndRemoveFromScreen(true)
+    //   } else if (initialX - 100 > movingX) {
+    //     console.log("swipe left")
+    //     //swipe left
+    //     addSportAndRemoveFromScreen(false)
+    //   }
+    // }
+
+    // window.addEventListener("touchstart", startTouch, false)
+    // window.addEventListener("touchmove", moveTouch, false)
+    // window.addEventListener("touchend", endTouch, false)
+
+    getSports()
+    //
     // return () => {
-    // window.removeEventListener("touchstart", startTouch, false)
+    //   window.removeEventListener("touchstart", startTouch, false)
     //   window.removeEventListener("touchmove", moveTouch, false)
     //   window.removeEventListener("touchend", endTouch, false)
-    getSports()
     // }
   }, [])
 
