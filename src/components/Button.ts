@@ -2,6 +2,11 @@ import styled from "styled-components"
 
 interface ButtonProps {
   mt?: number
+  pb?: number
+  pt?: number
+  pl?: number
+  pr?: number
+  size?: number
 }
 
 export const Button = styled.button<ButtonProps>`
@@ -13,12 +18,15 @@ export const Button = styled.button<ButtonProps>`
   box-shadow: ${({ theme }) => theme.buttonShadow};
   outline: none;
   border: none;
-  padding: 22px 38px;
-  font-size: 18px;
+  padding-bottom: ${({ pb }) => (pb ? pb : 22)}px;
+  padding-top: ${({ pt }) => (pt ? pt : 22)}px;
+  padding-left: ${({ pl }) => (pl ? pl : 38)}px;
+  padding-right: ${({ pr }) => (pr ? pr : 38)}px;
+  font-size: ${({ size }) => (size ? size : 18)}px;
   cursor: pointer;
   transition: opacity 0.2s ease-in;
   margin-top: ${({ mt }) => `${mt}px`};
   &:hover {
-    opacity: 0.9;
+    opacity: 0.8;
   }
 `

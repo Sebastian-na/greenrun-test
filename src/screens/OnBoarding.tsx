@@ -4,7 +4,6 @@ import messi from "../assets/images/messi.png"
 import { Link } from "react-router-dom"
 import { Paragraph } from "../components/Paragraph"
 import { Headline } from "../components/Headline"
-import { useEffect } from "react"
 
 const Image = styled.img`
   width: 100%;
@@ -57,9 +56,24 @@ const OnBoarding = () => {
         <Paragraph size={18} op={0.8} mt={12} lh={26} mb={70}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </Paragraph>
-        <Link to="/login">
-          <Button>Login</Button>
-        </Link>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "10px",
+          }}
+        >
+          <Link to="/login">
+            <Button size={16} pb={20} pt={20} pr={30} pl={30}>
+              Login
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button size={16} pb={20} pt={20} pr={30} pl={30}>
+              Sign up
+            </Button>
+          </Link>
+        </div>
       </WelcomeContainer>
     </Container>
   )

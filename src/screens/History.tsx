@@ -6,6 +6,7 @@ import styled, { useTheme } from "styled-components"
 import HeartIcon from "../assets/icons/HeartIcon"
 import ExIcon from "../assets/icons/ExIcon"
 import { Paragraph } from "../components/Paragraph"
+import Loading from "../components/Loading"
 
 const SportItem = styled.li`
   position: relative;
@@ -68,6 +69,7 @@ const IconContainer = styled.div`
 
 const History = () => {
   const [userSports, setUserSports] = useState<Sport[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const { user } = useAuth()
   const theme = useTheme()
 
@@ -89,7 +91,9 @@ const History = () => {
 
   useEffect(() => {
     async function getSports() {
+      setIsLoading(true)
       const userSports = (await getUserSports(user.uid)) as Sport[]
+      setIsLoading(false)
       setUserSports(userSports)
     }
     getSports()
@@ -103,21 +107,25 @@ const History = () => {
       <Paragraph size={18} mt={20} mb={20}>{`${date.getDate()} ${
         monthNames[date.getMonth()]
       }`}</Paragraph>
-      <SportList>
-        {userSports.map((sport) => (
-          <SportItem key={sport.idSport}>
-            <SportName>{sport.strSport}</SportName>
-            <SportImage src={sport.strSportThumb} />
-            <IconContainer>
-              {sport.liked ? (
-                <HeartIcon width={24} fill={theme.heartColorHistory} />
-              ) : (
-                <ExIcon width={24} fill={theme.xColorHistory} />
-              )}
-            </IconContainer>
-          </SportItem>
-        ))}
-      </SportList>
+      {isLoading ? (
+        <Loading size={200} />
+      ) : (
+        <SportList>
+          {userSports.map((sport) => (
+            <SportItem key={sport.idSport}>
+              <SportName>{sport.strSport}</SportName>
+              <SportImage src={sport.strSportThumb} />
+              <IconContainer>
+                {sport.liked ? (
+                  <HeartIcon width={24} fill={theme.heartColorHistory} />
+                ) : (
+                  <ExIcon width={24} fill={theme.xColorHistory} />
+                )}
+              </IconContainer>
+            </SportItem>
+          ))}
+        </SportList>
+      )}
     </Container>
   )
 }

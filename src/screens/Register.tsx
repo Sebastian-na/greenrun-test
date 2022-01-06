@@ -1,21 +1,19 @@
-import React, { useRef, useState, useEffect } from "react"
-import styled from "styled-components"
+import { useRef, useState } from "react"
+import { Headline } from "../components/Headline"
 import { Button } from "../components/Button"
+import { Paragraph } from "../components/Paragraph"
 import Input from "../components/Input"
+import styled from "styled-components"
 import {
-  getAuth,
-  signInWithEmailAndPassword,
-  setPersistence,
   browserLocalPersistence,
-  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  getAuth,
+  setPersistence,
 } from "firebase/auth"
-import { app } from "../firebase-config"
+import { useAuth } from "../contexts/AuthContext"
+import { useNavigate, Link } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { useLocation, useNavigate } from "react-router-dom"
-import { useAuth } from "../contexts/AuthContext"
-import { Headline } from "../components/Headline"
-import { Paragraph } from "../components/Paragraph"
 import { capitalizeFirstLetter } from "../utils"
 import { StyledLink } from "../components/StyledLink"
 
@@ -37,57 +35,14 @@ const InputsContainer = styled.div`
   margin-top: 20px;
 `
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const userInputRef = useRef(document.createElement("input"))
   const passwordInputRef = useRef(document.createElement("input"))
 
-  const navigate = useNavigate()
-
-  interface LocationState {
-    from: {
-      pathname: string
-    }
-  }
-
-  useEffect(() => {
-    const auth = getAuth()
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user)
-        navigate("/home")
-      }
-    })
-  }, [])
-
-  const location = useLocation()
-  const { from } = (location.state as LocationState) || {
-    from: { pathname: "/home" },
-  }
-
   const { setUser } = useAuth()
-
-  const handleLogin = async () => {
-    try {
-      const authentication = getAuth(app)
-      await setPersistence(authentication, browserLocalPersistence)
-      const data = await signInWithEmailAndPassword(
-        authentication,
-        email,
-        password
-      )
-      if (data.user) {
-        setUser(data.user)
-        navigate(from.pathname, { replace: true })
-      }
-    } catch (e: any) {
-      const message = e.code.split("/")[1].split("-")
-      toast.error(
-        `${capitalizeFirstLetter(message[0])} ${message.slice(1).join(" ")}`
-      )
-    }
-  }
+  const navigate = useNavigate()
 
   const handleEnterOnEmail = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
@@ -96,15 +51,33 @@ const Login = () => {
   }
   const handleEnterOnPassword = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      handleLogin()
+      handleRegister()
     }
+  }
+
+  const handleRegister = async () => {
+    const auth = getAuth()
+    await setPersistence(auth, browserLocalPersistence)
+    try {
+      const user = await createUserWithEmailAndPassword(auth, email, password)
+      setUser(user)
+      navigate("/home")
+    } catch (e: any) {
+      const message = e.code.split("/")[1].split("-")
+      toast.error(
+        `${capitalizeFirstLetter(message[0])} ${message.slice(1).join(" ")}`
+      )
+    }
+    const user = await createUserWithEmailAndPassword(auth, email, password)
+    setUser(user)
+    navigate("/home")
   }
 
   return (
     <>
       <Container>
         <Headline n={1} size={42} center>
-          Welcome
+          Register
         </Headline>
         <Paragraph center lh={26} mt={12} op={0.8}>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -126,16 +99,11 @@ const Login = () => {
           />
         </InputsContainer>
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Paragraph size={16} op={0.8} mt={12} lh={26}>
-            Forgot your password?
-          </Paragraph>
-          <Paragraph size={16} op={0.8} mt={12} lh={26}>
-            <StyledLink to="/register">Don't have an account?</StyledLink>
-          </Paragraph>
-        </div>
-        <Button onClick={handleLogin} mt={22}>
-          Login
+        <Paragraph size={16} op={0.8} mt={12} lh={26}>
+          Already have an account? <StyledLink to="/login">Login</StyledLink>
+        </Paragraph>
+        <Button onClick={handleRegister} mt={22}>
+          Register
         </Button>
       </Container>
       <ToastContainer />
@@ -143,4 +111,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Register

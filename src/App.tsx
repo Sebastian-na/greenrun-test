@@ -6,6 +6,7 @@ import Home from "./screens/Home"
 import History from "./screens/History"
 import { AuthProvider, RequireAuth } from "./contexts/AuthContext"
 import Nav from "./components/Nav"
+import Register from "./screens/Register"
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Routes>
               <Route path="/" element={<OnBoarding />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route
                 path="/home"
                 element={
