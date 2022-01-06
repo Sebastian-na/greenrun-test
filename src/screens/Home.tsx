@@ -188,23 +188,20 @@ const Home = () => {
     keys: null,
     from: {
       opacity: 0,
-      transform: "translate3d(-50%,0,0) rotate(0deg) scale(0.9)",
-      position: "absolute",
+      transform: "translate3d(-50%,0,0) rotate(0deg)",
     },
     enter: {
       opacity: 1,
-      transform: "translate3d(-50%,0,0) rotate(0deg) scale(1)",
-      position: "absolute",
+      transform: "translate3d(-50%,0,0) rotate(0deg)",
     },
     leave: {
       opacity: 0,
       transform: liked
-        ? "translate3d(100%,0,0) rotate(45deg) scale(0.8)"
-        : "translate3d(-200%,0,0) rotate(-45deg) scale(0.8)",
-      position: "absolute",
+        ? "translate3d(100%,0,0) rotate(45deg)"
+        : "translate3d(-200%,0,0) rotate(-45deg)",
     },
     config: {
-      duration: 150,
+      duration: 500,
     },
   })
 
