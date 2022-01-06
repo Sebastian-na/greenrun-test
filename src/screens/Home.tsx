@@ -6,6 +6,13 @@ import ExIcon from "../assets/icons/ExIcon"
 import ThemeToggleButton from "../components/ThemeToggleButton"
 import { useTheme } from "styled-components"
 import { getAndFilterSports, addSport } from "../services/db"
+import Loading from "../components/Loading"
+import {
+  useSpring,
+  animated,
+  useTransition,
+  useSpringRef,
+} from "@react-spring/web"
 
 export interface Sport {
   idSport: string
@@ -13,7 +20,7 @@ export interface Sport {
   strSportThumb: string
 }
 
-const SportImage = styled.img`
+const SportImage = styled(animated.img)`
   width: 100%;
 `
 
@@ -26,7 +33,7 @@ const SportName = styled.h2`
   color: ${({ theme }) => theme.white};
 `
 
-const GridContainer = styled.div`
+const GridContainer = styled(animated.div)`
   position: relative;
   margin: 0 auto;
   display: grid;
@@ -50,7 +57,7 @@ const GridContainer = styled.div`
   }
 `
 
-const Controls = styled.div`
+const Controls = styled(animated.div)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,6 +77,9 @@ const HeartIconContainer = styled.div`
   display: grid;
   place-items: center;
   cursor: pointer;
+  &:hover {
+    opacity: 0.9;
+  }
 `
 
 const ExIconContainer = styled.div`
@@ -81,14 +91,32 @@ const ExIconContainer = styled.div`
   display: grid;
   place-items: center;
   cursor: pointer;
+  &:hover {
+    opacity: 0.9;
+  }
 `
+
+const CenteredContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
+
+const SportsContainer = styled(animated.div)``
 
 const Home = () => {
   const [sports, setSports] = useState<Sport[]>([])
+  const [index, setIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
 
   const { user } = useAuth()
   const theme = useTheme()
+
+  const addSportAndRemoveFromScreen = async (liked: boolean) => {
+    addSport(sports[index], liked, user.uid)
+    setIndex(index + 1)
+  }
 
   useEffect(() => {
     document.title = "Home"
@@ -101,34 +129,64 @@ const Home = () => {
     getSports()
   }, [])
 
-  const addSportAndRemoveFromScreen = async (liked: boolean) => {
-    addSport(sports[0], liked, user.uid)
-    setSports(sports.slice(1))
-  }
+  const [fadeSlideIn] = useSpring(() => ({
+    transform: "translateY(0)",
+    opacity: 1,
+    from: {
+      transform: "translateY(-100%)",
+      opacity: 0,
+    },
+    config: {
+      duration: 1000,
+    },
+    delay: 500,
+  }))
+
+  const transRef = useSpringRef()
+
+  const transitions = useTransition(index, {
+    ref: transRef,
+    keys: null,
+    from: {
+      opacity: 0,
+      transform: "translate3d(0%,0,0) rotate(0deg)",
+    },
+    enter: { opacity: 1, transform: "translate3d(0%,0,0) rotate(0deg)" },
+    leave: {
+      opacity: 0,
+      transform: "translate3d(-100%,0,0) rotate(-45deg)",
+      position: "absolute",
+    },
+    config: {
+      duration: 500,
+    },
+  })
+
+  useEffect(() => {
+    transRef.start()
+  }, [index])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loading size={300} />
   }
 
-  return sports?.length > 0 ? (
+  return sports?.length > 0 && index < sports?.length ? (
     <>
-      <GridContainer>
-        <ThemeToggleButton />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportImage src={sports[0].strSportThumb} />
-        <SportName>{sports[0].strSport}</SportName>
-      </GridContainer>
-      <Controls>
+      <SportsContainer style={fadeSlideIn}>
+        {transitions(
+          (styles, index) =>
+            sports[index] && (
+              <GridContainer style={styles}>
+                <ThemeToggleButton />
+                {[...Array(12)].map((_, i) => (
+                  <SportImage src={sports[index].strSportThumb} key={i} />
+                ))}
+                <SportName>{sports[index].strSport}</SportName>
+              </GridContainer>
+            )
+        )}
+      </SportsContainer>
+      <Controls style={fadeSlideIn}>
         <ExIconContainer onClick={() => addSportAndRemoveFromScreen(false)}>
           <ExIcon fill={theme.xColorHome} />
         </ExIconContainer>
@@ -138,7 +196,7 @@ const Home = () => {
       </Controls>
     </>
   ) : (
-    <div>No available sports to show</div>
+    <CenteredContainer>No available sports to show</CenteredContainer>
   )
 }
 

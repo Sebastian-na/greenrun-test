@@ -43,10 +43,10 @@ const NavItem = styled.li<NavItemProps>`
   cursor: pointer;
   background-color: ${({ theme, active }) =>
     active ? theme.menuItemBgColor : "transparent"};
-  & > a > svg {
+  & > svg {
     pointer-events: none;
   }
-  & > a svg > path {
+  & > svg > path {
     fill: ${({ theme, active }) =>
       active ? theme.menuItemColorActive : theme.menuItemColorInactive};
     pointer-events: none;
@@ -89,21 +89,21 @@ const Nav = () => {
       <NavMenuContainer>
         <NavMenu>
           <NavMenuList>
-            <NavItem active={homeActive} onClick={handleHomeClick}>
-              <Link to="/home">
+            <Link to="/home">
+              <NavItem active={homeActive} onClick={handleHomeClick}>
                 <HomeIcon />
-              </Link>
-            </NavItem>
-            <NavItem active={historyActive} onClick={handleHistoryClick}>
-              <Link to="/history">
+              </NavItem>
+            </Link>
+            <Link to="/history">
+              <NavItem active={historyActive} onClick={handleHistoryClick}>
                 <HistoryIcon />
-              </Link>
-            </NavItem>
-            <NavItem active={notesActive} onClick={handleNotesClick}>
-              <Link to="/notes">
+              </NavItem>
+            </Link>
+            <Link to="/notes">
+              <NavItem active={notesActive} onClick={handleNotesClick}>
                 <NotesIcon />
-              </Link>
-            </NavItem>
+              </NavItem>
+            </Link>
             <NavItem>
               <UserImage src={defaultUser} alt="user pic" />
             </NavItem>
