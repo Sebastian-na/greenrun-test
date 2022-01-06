@@ -8,6 +8,15 @@ export const InputEl = styled.input`
   color: ${({ theme }) => theme.darkTextOnBg};
   background-color: transparent;
   font-size: 18px;
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px ${({ theme }) => theme.bgColorOnBgColor}
+      inset !important;
+    -webkit-text-fill-color: ${({ theme }) => theme.darkTextOnBg} !important;
+    outline: none;
+  }
 `
 
 const Container = styled.div`

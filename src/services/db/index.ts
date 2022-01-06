@@ -1,4 +1,4 @@
-import { Sport } from "../../screens/Home"
+import { Sport } from "../../interfaces/"
 import {
   doc,
   setDoc,
@@ -27,13 +27,25 @@ export const addSport = async (
   userId: string
 ) => {
   const userDocId = await getUserDocId(userId)
-  await addDoc(collection(db, `users/${userDocId}/sports`), {
-    ...sport,
-    liked,
-    createdAt: new Date().getTime(),
-  })
+  const q = query(
+    collection(db, `users/${userDocId}/sports`),
+    where("idSport", "==", sport.idSport)
+  )
+  const snapShot = await getDocs(q)
+  if (snapShot.docs.length === 0) {
+    await addDoc(collection(db, `users/${userDocId}/sports`), {
+      ...sport,
+      liked,
+      createdAt: new Date().getTime(),
+    })
+  } else {
+    await setDoc(doc(db, `users/${userDocId}/sports`, snapShot.docs[0].id), {
+      ...sport,
+      liked,
+      createdAt: new Date().getTime(),
+    })
+  }
 }
-
 export const getAndFilterSports = async (userId: string) => {
   try {
     const allSports: Sport[] = await getAllSports()

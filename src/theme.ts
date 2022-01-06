@@ -35,6 +35,7 @@ export const GlobalStyles = createGlobalStyle<{ theme: DefaultTheme }>`
   }
   html{
     font-size: 62.5%;
+    overflow-x: hidden;
   }
   body {
     background: ${({ theme }) => theme.bgColor};

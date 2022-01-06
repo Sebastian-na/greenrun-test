@@ -9,7 +9,9 @@ export function useThemeUpdate() {
 }
 
 export const CustomThemeProvider: React.FC = ({ children }) => {
-  const [darkTheme, setDarkTheme] = useState(false)
+  const [darkTheme, setDarkTheme] = useState(
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  )
 
   function toggleTheme() {
     setDarkTheme((prev) => !prev)

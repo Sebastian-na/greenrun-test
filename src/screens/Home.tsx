@@ -122,45 +122,26 @@ const Home = () => {
     setIndex(index + 1)
   }
 
-  // Swipe Up / Down / Left / Right
   let initialX: number | null = null
-  let initialY: number | null = null
+  let movingX: number | null = null
 
   const startTouch = (e: TouchEvent) => {
     initialX = e.touches[0].clientX
-    initialY = e.touches[0].clientY
   }
 
   const moveTouch = (e: TouchEvent) => {
-    if (initialX === null) {
-      return
+    movingX = e.touches[0].clientX
+  }
+
+  const endTouch = (e: TouchEvent) => {
+    if (initialX === null || movingX === null) return
+    if (initialX + 100 < movingX) {
+      //swipe right
+      addSportAndRemoveFromScreen(true)
+    } else if (initialX - 100 > movingX) {
+      //swipe left
+      addSportAndRemoveFromScreen(false)
     }
-
-    if (initialY === null) {
-      return
-    }
-
-    var currentX = e.touches[0].clientX
-    var currentY = e.touches[0].clientY
-
-    var diffX = initialX - currentX
-    var diffY = initialY - currentY
-
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-      // sliding horizontally
-      if (diffX > 0) {
-        // swiped left
-        addSportAndRemoveFromScreen(false)
-      } else {
-        // swiped right
-        addSportAndRemoveFromScreen(true)
-      }
-    }
-
-    initialX = null
-    initialY = null
-
-    e.preventDefault()
   }
 
   useEffect(() => {
@@ -173,10 +154,12 @@ const Home = () => {
     }
     window.addEventListener("touchstart", startTouch, false)
     window.addEventListener("touchmove", moveTouch, false)
+    window.addEventListener("touchend", endTouch, false)
     getSports()
     return () => {
       window.removeEventListener("touchstart", startTouch, false)
       window.removeEventListener("touchmove", moveTouch, false)
+      window.removeEventListener("touchend", endTouch, false)
     }
   }, [])
 
@@ -201,7 +184,6 @@ const Home = () => {
     from: {
       opacity: 0,
       transform: "translate3d(-50%,0,0) rotate(0deg)",
-      // position: "absolute",
     },
     enter: {
       opacity: 1,
@@ -213,7 +195,6 @@ const Home = () => {
       transform: liked
         ? "translate3d(100%,0,0) rotate(45deg)"
         : "translate3d(-200%,0,0) rotate(-45deg)",
-      // position: "absolute",
     },
     config: {
       duration: 500,
@@ -232,10 +213,15 @@ const Home = () => {
     <>
       <SportsContainer style={fadeSlideIn}>
         {transitions(
-          (styles, index) =>
+          ({ opacity, transform }, index) =>
             sports[index] && (
               <>
-                <GridContainer style={styles}>
+                <GridContainer
+                  style={{
+                    opacity: opacity as any,
+                    transform: transform as any,
+                  }}
+                >
                   <ThemeToggleButton />
                   {[...Array(10)].map((_, i) => (
                     <SportImage src={sports[index].strSportThumb} key={i} />

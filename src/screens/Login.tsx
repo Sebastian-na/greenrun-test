@@ -116,6 +116,7 @@ const Login = () => {
             label="User"
             onChange={(e) => setEmail(e.target.value)}
             onEnter={handleEnterOnEmail}
+            type="email"
           />
           <Input
             innerRef={passwordInputRef}
