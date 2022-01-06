@@ -28,7 +28,6 @@ const SportList = styled.ul`
   display: grid;
   grid-template-columns: 100%;
   grid-gap: 20px;
-  padding: 20px;
   padding-bottom: 100px;
   border-radius: 16px;
   max-width: 500px;
@@ -49,6 +48,7 @@ const Headline = styled.h2`
 
 const Paragraph = styled.p`
   font-size: 18px;
+  margin: 20px 0;
 `
 
 const SportName = styled.h3`
@@ -75,6 +75,22 @@ const History = () => {
   const { user } = useAuth()
   const theme = useTheme()
 
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
+  const date = new Date()
+
   useEffect(() => {
     async function getSports() {
       const userSports = (await getUserSports(user.uid)) as Sport[]
@@ -88,6 +104,9 @@ const History = () => {
       <Paragraph>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit.
       </Paragraph>
+      <Paragraph>{`${date.getDate()} ${
+        monthNames[date.getMonth()]
+      }`}</Paragraph>
       <SportList>
         {userSports.map((sport) => (
           <SportItem key={sport.idSport}>
