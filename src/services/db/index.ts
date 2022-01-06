@@ -17,6 +17,14 @@ const db = getFirestore()
 const getUserDocId = async (userId: string) => {
   const userQuery = query(collection(db, "users"), where("id", "==", userId))
   const userSnapShot = await getDocs(userQuery)
+
+  if (userSnapShot.docs.length === 0) {
+    //create new doc
+    const newUserDoc = await addDoc(collection(db, "users"), {
+      id: userId,
+    })
+    return newUserDoc.id
+  }
   const userDocId = userSnapShot.docs[0].id
   return userDocId
 }

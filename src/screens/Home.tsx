@@ -116,11 +116,17 @@ const Home = () => {
   const { user } = useAuth()
   const theme = useTheme()
 
-  const addSportAndRemoveFromScreen = (liked: boolean) => {
-    setLiked(liked)
+  const addSportAndRemoveFromScreen = async (liked: boolean) => {
+    console.log("index", index)
+    console.log(sports[index])
+    // setLiked(liked)
     addSport(sports[index], liked, user.uid)
-    setIndex(index + 1)
+    setIndex((prev) => prev + 1)
   }
+
+  useEffect(() => {
+    console.log("Mounted")
+  }, [])
 
   let initialX: number | null = null
   let movingX: number | null = null
@@ -156,12 +162,13 @@ const Home = () => {
     window.addEventListener("touchstart", startTouch, false)
     window.addEventListener("touchmove", moveTouch, false)
     window.addEventListener("touchend", endTouch, false)
+
+    // return () => {
+    // window.removeEventListener("touchstart", startTouch, false)
+    //   window.removeEventListener("touchmove", moveTouch, false)
+    //   window.removeEventListener("touchend", endTouch, false)
     getSports()
-    return () => {
-      window.removeEventListener("touchstart", startTouch, false)
-      window.removeEventListener("touchmove", moveTouch, false)
-      window.removeEventListener("touchend", endTouch, false)
-    }
+    // }
   }, [])
 
   const [fadeSlideIn] = useSpring(() => ({
@@ -189,7 +196,6 @@ const Home = () => {
     enter: {
       opacity: 1,
       transform: "translate3d(-50%,0,0) rotate(0deg)",
-      zIndex: 20,
     },
     leave: {
       opacity: 0,

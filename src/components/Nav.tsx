@@ -67,11 +67,11 @@ const UserImage = styled.img`
 `
 
 type UserOptionsProps = {
-  active: boolean
+  $active?: boolean
 }
 
 const UserOptions = styled(animated.div)<UserOptionsProps>`
-  opacity: ${({ active }) => (active ? 1 : 0)};
+  opacity: ${({ $active }) => ($active ? 1 : 0)};
   position: absolute;
   top: -100%;
   left: 50%;
@@ -137,50 +137,50 @@ const Nav = () => {
     setUser(null)
     navigate("/")
   }
-  return (
-    user && (
-      <NavMenuContainer>
-        <NavMenu>
-          <NavMenuList>
-            <Link to="/home">
-              <NavItem active={homeActive} onClick={handleHomeClick}>
-                <HomeIcon />
-              </NavItem>
-            </Link>
-            <Link to="/history">
-              <NavItem active={historyActive} onClick={handleHistoryClick}>
-                <HistoryIcon />
-              </NavItem>
-            </Link>
-            <Link to="/notes">
-              <NavItem active={notesActive} onClick={handleNotesClick}>
-                <NotesIcon />
-              </NavItem>
-            </Link>
-            <NavUserItem
-              onClick={() => setUserItemOptionsActive((prev) => !prev)}
+  return user ? (
+    <NavMenuContainer>
+      <NavMenu>
+        <NavMenuList>
+          <Link to="/home">
+            <NavItem active={homeActive} onClick={handleHomeClick}>
+              <HomeIcon />
+            </NavItem>
+          </Link>
+          <Link to="/history">
+            <NavItem active={historyActive} onClick={handleHistoryClick}>
+              <HistoryIcon />
+            </NavItem>
+          </Link>
+          <Link to="/notes">
+            <NavItem active={notesActive} onClick={handleNotesClick}>
+              <NotesIcon />
+            </NavItem>
+          </Link>
+          <NavUserItem
+            onClick={() => setUserItemOptionsActive((prev) => !prev)}
+          >
+            <UserImage src={defaultUser} alt="user pic" />
+            <UserOptions
+              $active={userItemOptionsActive}
+              style={userItemOptionsSpring}
             >
-              <UserImage src={defaultUser} alt="user pic" />
-              <UserOptions
-                active={userItemOptionsActive}
-                style={userItemOptionsSpring}
+              <Button
+                onClick={handleLogout}
+                pb={10}
+                pt={10}
+                pl={15}
+                pr={15}
+                size={14}
               >
-                <Button
-                  onClick={handleLogout}
-                  pb={10}
-                  pt={10}
-                  pl={15}
-                  pr={15}
-                  size={14}
-                >
-                  Logout
-                </Button>
-              </UserOptions>
-            </NavUserItem>
-          </NavMenuList>
-        </NavMenu>
-      </NavMenuContainer>
-    )
+                Logout
+              </Button>
+            </UserOptions>
+          </NavUserItem>
+        </NavMenuList>
+      </NavMenu>
+    </NavMenuContainer>
+  ) : (
+    <span></span>
   )
 }
 
