@@ -188,24 +188,28 @@ const Home = () => {
     keys: null,
     from: {
       opacity: 0,
-      transform: "translate3d(-50%,0,0) rotate(0deg)",
+      transform: "translate3d(-50%,0,0) rotate(0deg) scale(0.9)",
+      position: "absolute",
     },
     enter: {
       opacity: 1,
-      transform: "translate3d(-50%,0,0) rotate(0deg)",
+      transform: "translate3d(-50%,0,0) rotate(0deg) scale(1)",
+      position: "absolute",
     },
     leave: {
       opacity: 0,
       transform: liked
-        ? "translate3d(100%,0,0) rotate(45deg)"
-        : "translate3d(-200%,0,0) rotate(-45deg)",
+        ? "translate3d(100%,0,0) rotate(45deg) scale(0.8)"
+        : "translate3d(-200%,0,0) rotate(-45deg) scale(0.8)",
+      position: "absolute",
     },
     config: {
-      duration: 500,
+      duration: 150,
     },
   })
 
   useEffect(() => {
+    console.log(index)
     transRef.start()
   }, [index])
 
