@@ -1,4 +1,3 @@
-import React from "react"
 import { useThemeUpdate } from "../contexts/ThemeContext"
 import styled from "styled-components"
 

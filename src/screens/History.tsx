@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getUserSports } from "../services/db"
-import { Sport } from "./Home"
+import { Sport } from "../interfaces"
 import { useAuth } from "../contexts/AuthContext"
 import styled, { useTheme } from "styled-components"
 import HeartIcon from "../assets/icons/HeartIcon"

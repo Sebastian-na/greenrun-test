@@ -7,19 +7,13 @@ import ThemeToggleButton from "../components/ThemeToggleButton"
 import { useTheme } from "styled-components"
 import { getAndFilterSports, addSport } from "../services/db"
 import Loading from "../components/Loading"
+import { Sport } from "../interfaces"
 import {
   useSpring,
   animated,
   useTransition,
   useSpringRef,
 } from "@react-spring/web"
-
-export interface Sport {
-  idSport: string
-  strSport: string
-  strSportThumb: string
-  liked: boolean
-}
 
 const SportImage = styled.img`
   width: 100%;
