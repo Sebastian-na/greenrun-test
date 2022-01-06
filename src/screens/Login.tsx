@@ -127,10 +127,10 @@ const Login = () => {
         </InputsContainer>
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Paragraph size={16} op={0.8} mt={12} lh={26}>
+          <Paragraph size={14} op={0.8} mt={12} lh={26}>
             Forgot your password?
           </Paragraph>
-          <Paragraph size={16} op={0.8} mt={12} lh={26}>
+          <Paragraph size={14} op={0.8} mt={12} lh={26}>
             <StyledLink to="/register">Don't have an account?</StyledLink>
           </Paragraph>
         </div>

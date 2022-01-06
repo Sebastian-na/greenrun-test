@@ -59,8 +59,8 @@ const Register = () => {
     const auth = getAuth()
     await setPersistence(auth, browserLocalPersistence)
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password)
-      setUser(user)
+      const data = await createUserWithEmailAndPassword(auth, email, password)
+      setUser(data.user)
       navigate("/home")
     } catch (e: any) {
       const message = e.code.split("/")[1].split("-")
