@@ -127,15 +127,63 @@ const Home = () => {
     setIndex(index + 1)
   }
 
+  // Swipe Up / Down / Left / Right
+  let initialX: number | null = null
+  let initialY: number | null = null
+
+  const startTouch = (e: TouchEvent) => {
+    initialX = e.touches[0].clientX
+    initialY = e.touches[0].clientY
+  }
+
+  const moveTouch = (e: TouchEvent) => {
+    if (initialX === null) {
+      return
+    }
+
+    if (initialY === null) {
+      return
+    }
+
+    var currentX = e.touches[0].clientX
+    var currentY = e.touches[0].clientY
+
+    var diffX = initialX - currentX
+    var diffY = initialY - currentY
+
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      // sliding horizontally
+      if (diffX > 0) {
+        // swiped left
+        addSportAndRemoveFromScreen(false)
+      } else {
+        // swiped right
+        addSportAndRemoveFromScreen(true)
+      }
+    }
+
+    initialX = null
+    initialY = null
+
+    e.preventDefault()
+  }
+
   useEffect(() => {
     document.title = "Home"
     async function getSports() {
       setIsLoading(true)
       const sports = (await getAndFilterSports(user.uid)) as Sport[]
+      console.log(sports)
       setSports(sports)
       setIsLoading(false)
     }
+    window.addEventListener("touchstart", startTouch, false)
+    window.addEventListener("touchmove", moveTouch, false)
     getSports()
+    return () => {
+      window.removeEventListener("touchstart", startTouch, false)
+      window.removeEventListener("touchmove", moveTouch, false)
+    }
   }, [])
 
   const [fadeSlideIn] = useSpring(() => ({
@@ -181,11 +229,6 @@ const Home = () => {
   useEffect(() => {
     transRef.start()
   }, [index])
-
-  useEffect(() => {
-    if (liked) {
-    }
-  }, [liked])
 
   if (isLoading) {
     return <Loading size={300} />
