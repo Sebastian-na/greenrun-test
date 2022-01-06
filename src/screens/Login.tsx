@@ -1,33 +1,21 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import styled from "styled-components"
 import { Button } from "../components/Button"
 import Input from "../components/Input"
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import firebase, {
+  getAuth,
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+  onAuthStateChanged,
+} from "firebase/auth"
 import { app } from "../firebase-config"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
-
-const Headline = styled.h1`
-  color: ${({ theme }) => theme.darkTextOnBg};
-  font-size: 42px;
-  text-align: center;
-`
-
-type ParagraphProps = {
-  center?: boolean
-  size?: number
-}
-
-const Paragraph = styled.p<ParagraphProps>`
-  color: ${({ theme }) => theme.textOnBg};
-  font-size: ${({ size }) => (size ? size : 18)}px;
-  opacity: 0.8;
-  margin-top: 12px;
-  line-height: 26px;
-  text-align: ${({ center }) => (center ? "center" : "left")};
-`
+import { Headline } from "../components/Headline"
+import { Paragraph } from "../components/Paragraph"
 
 const Container = styled.div`
   max-width: 500px;
@@ -54,12 +42,23 @@ const Login = () => {
   const passwordInputRef = useRef(document.createElement("input"))
 
   const navigate = useNavigate()
+  const auth = getAuth()
 
   interface LocationState {
     from: {
       pathname: string
     }
   }
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user)
+        navigate("/home")
+      }
+    })
+  }, [])
+
   const location = useLocation()
   const { from } = (location.state as LocationState) || {
     from: { pathname: "/home" },
@@ -70,6 +69,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const authentication = getAuth(app)
+      await setPersistence(authentication, browserLocalPersistence)
       const data = await signInWithEmailAndPassword(
         authentication,
         email,
@@ -77,7 +77,6 @@ const Login = () => {
       )
       if (data.user) {
         setUser(data.user)
-        console.log(data.user)
         navigate(from.pathname, { replace: true })
       }
     } catch (e: any) {
@@ -106,8 +105,10 @@ const Login = () => {
   return (
     <>
       <Container>
-        <Headline>Welcome</Headline>
-        <Paragraph center>
+        <Headline n={1} size={42} center>
+          Welcome
+        </Headline>
+        <Paragraph center lh={26} mt={12} op={0.8}>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit.
         </Paragraph>
         <InputsContainer>
@@ -127,7 +128,9 @@ const Login = () => {
           />
         </InputsContainer>
 
-        <Paragraph size={16}>Forgot your password?</Paragraph>
+        <Paragraph size={16} op={0.8} mt={12} lh={26}>
+          Forgot your password?
+        </Paragraph>
         <Button onClick={handleLogin} mt={22}>
           Login
         </Button>

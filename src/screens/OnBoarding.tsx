@@ -1,7 +1,10 @@
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 import { Button } from "../components/Button"
 import messi from "../assets/images/messi.png"
 import { Link } from "react-router-dom"
+import { Paragraph } from "../components/Paragraph"
+import { Headline } from "../components/Headline"
+import { useEffect } from "react"
 
 const Image = styled.img`
   width: 100%;
@@ -41,28 +44,17 @@ const WelcomeContainer = styled.div`
   }
 `
 
-const Headline = styled.h1`
-  color: ${({ theme }) => theme.textOnBg};
-  font-size: 28px;
-  line-height: 34px;
-`
-
-const Paragraph = styled.p`
-  color: ${({ theme }) => theme.textOnBg};
-  font-size: 18px;
-  opacity: 0.8;
-  margin-top: 12px;
-  line-height: 26px;
-  margin-bottom: 70px;
-`
-
 const OnBoarding = () => {
+  const theme = useTheme()
+
   return (
     <Container>
       <Image src={messi} alt="messi image" />
       <WelcomeContainer>
-        <Headline>Discover Your Best Sport With Us</Headline>
-        <Paragraph>
+        <Headline n={1} size={28} lh={34} color={theme.textOnBg}>
+          Discover Your Best Sport With Us
+        </Headline>
+        <Paragraph size={18} op={0.8} mt={12} lh={26} mb={70}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </Paragraph>
         <Link to="/login">

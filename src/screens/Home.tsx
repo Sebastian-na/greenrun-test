@@ -134,6 +134,7 @@ const Home = () => {
   }
 
   const endTouch = (e: TouchEvent) => {
+    console.log(initialX, movingX)
     if (initialX === null || movingX === null) return
     if (initialX + 100 < movingX) {
       //swipe right

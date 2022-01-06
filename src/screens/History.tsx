@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext"
 import styled, { useTheme } from "styled-components"
 import HeartIcon from "../assets/icons/HeartIcon"
 import ExIcon from "../assets/icons/ExIcon"
+import { Paragraph } from "../components/Paragraph"
 
 const SportItem = styled.li`
   position: relative;
@@ -44,11 +45,6 @@ const Container = styled.div`
 const Headline = styled.h2`
   font-size: 34px;
   color: ${({ theme }) => theme.darkTextOnBg};
-`
-
-const Paragraph = styled.p`
-  font-size: 18px;
-  margin: 20px 0;
 `
 
 const SportName = styled.h3`
@@ -101,10 +97,10 @@ const History = () => {
   return (
     <Container>
       <Headline>History</Headline>
-      <Paragraph>
+      <Paragraph size={18} mt={20} mb={20}>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit.
       </Paragraph>
-      <Paragraph>{`${date.getDate()} ${
+      <Paragraph size={18} mt={20} mb={20}>{`${date.getDate()} ${
         monthNames[date.getMonth()]
       }`}</Paragraph>
       <SportList>
