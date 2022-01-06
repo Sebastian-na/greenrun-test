@@ -18,8 +18,10 @@ declare module "styled-components" {
     menuItemColorInactive: string
     xColorHome: string
     xColorHistory: string
+    heartColorHistory: string
     white: string
     theme: string
+    historySportItemBgColor: string
   }
 }
 
@@ -63,7 +65,9 @@ const lightTheme: DefaultTheme = {
   menuItemColorActive: "#1a5be1",
   xColorHome: "#d36060",
   xColorHistory: "#ea596f",
+  heartColorHistory: "#2067f8",
   white: "#fefefe",
+  historySportItemBgColor: "#ffffff",
   theme: "light",
 }
 
@@ -84,7 +88,9 @@ const darkTheme: DefaultTheme = {
   menuItemColorInactive: "#181828",
   xColorHome: "#ffffff",
   xColorHistory: "#ea596f",
+  heartColorHistory: "#ffffff",
   white: "#fefefe",
+  historySportItemBgColor: "#212135",
   theme: "dark",
 }
 

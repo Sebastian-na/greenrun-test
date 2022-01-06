@@ -15,6 +15,7 @@ const NavMenuContainer = styled.div`
   max-width: 500px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 50;
 `
 
 const NavMenu = styled.nav`

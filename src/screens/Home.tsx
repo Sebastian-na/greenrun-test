@@ -18,6 +18,7 @@ export interface Sport {
   idSport: string
   strSport: string
   strSportThumb: string
+  liked: boolean
 }
 
 const SportImage = styled.img`
@@ -173,7 +174,6 @@ const Home = () => {
     async function getSports() {
       setIsLoading(true)
       const sports = (await getAndFilterSports(user.uid)) as Sport[]
-      console.log(sports)
       setSports(sports)
       setIsLoading(false)
     }

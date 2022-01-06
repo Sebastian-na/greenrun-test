@@ -8,6 +8,7 @@ import {
   getDocs,
   where,
   addDoc,
+  orderBy,
 } from "firebase/firestore"
 import { getAllSports } from "../api"
 
@@ -29,6 +30,7 @@ export const addSport = async (
   await addDoc(collection(db, `users/${userDocId}/sports`), {
     ...sport,
     liked,
+    createdAt: new Date().getTime(),
   })
 }
 
@@ -47,4 +49,14 @@ export const getAndFilterSports = async (userId: string) => {
   } catch (e) {
     console.log(e)
   }
+}
+
+export const getUserSports = async (userId: string) => {
+  const userDocId = await getUserDocId(userId)
+  const q = query(
+    collection(db, `users/${userDocId}/sports`),
+    orderBy("createdAt", "desc")
+  )
+  const userSports = await getDocs(q)
+  return userSports.docs.map((doc) => doc.data())
 }
